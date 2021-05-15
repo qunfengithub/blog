@@ -30,8 +30,8 @@ public class LinkServiceImpl implements LinkService {
         //获取到 所有数据 集合
         List<BlogLink> links = blogLinkMapper.findLinkList(pageUtil);
         //获取到 数量
-        int total = blogLinkMapper.getTotalLinks(pageUtil);
-        PageResult pageResult = new PageResult(links, total, pageUtil.getLimit(), pageUtil.getPage());
+        int total1 = blogLinkMapper.getTotalLinks(pageUtil);
+        PageResult pageResult = new PageResult(links, total1, pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }
 
