@@ -40,42 +40,49 @@ public class AdminController {
     }
 
 
-    //登录的接口     登录的流程 就是 先
+    //登录的接口     登录的流程 就是 先 验证用户名 账号 验证码 是否为null 然后创建一个值
     @PostMapping(value = "/login")
-    public String login(@RequestParam("userName") String userName,
-                        @RequestParam("password") String passWord,
-                        @RequestParam("verifyCode") String verifyCode,
+    public String login(@RequestParam("UserName") String userName,
+                        @RequestParam("Password") String passWord,
+                        @RequestParam("verifyCode")String verifyCode,
                         HttpSession session){
 
+        //验证参数
         if (StringUtils.isEmpty(verifyCode)){
-            session.setAttribute("errorMsg","验证码不能为空");
+            //把错误信息存储到Session
+            session.setAttribute("errorMsg","验证码不正确");
             return "admin/login";
         }
-
         if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(passWord)){
-            session.setAttribute("errorMsg","用户名或密码不能为空");
+            session.setAttribute("errorMsg","用户名和密码不能为空");
             return "admin/login";
         }
-        String kaptchaCode = session.getAttribute("verifyCode") + "";
-        if (StringUtils.isEmpty(kaptchaCode) ||!kaptchaCode.equals(verifyCode)){
+        //Session 获取验证码
+        String kaptchaCode = session.getAttribute("verifyCode") + " ";
+        if (StringUtils.isEmpty(kaptchaCode) || kaptchaCode !=verifyCode){
             session.setAttribute("errorMsg","验证码错误");
             return "admin/login";
         }
-
-        //查询出登录的信息
-        AdminUser adminUser = adminUserService.login(userName,passWord);
-        if (adminUser!=null){ //登录的存在值  登录成功把用户放入session中
-            session.setAttribute("loginUser",adminUser.getLoginUserName());
-            session.setAttribute("loginUserId",adminUser.getAdminUserId());
-
-            //登录成功后  重定向到首页
-            return "redirect:/admin/index";
-        }else{
-            session.setAttribute("errorMsg","登录失败");
-            return "admin/login";
+        //从数据库中查询到用户名和密码
+        AdminUser adminUser = adminUserService.login(userName, passWord);
+        if (adminUser!=null){
+            session.setAttribute("loginUser",adminUser.getNickName());// 把用户名存储到Session中
+            session.setAttribute("loginUserId",adminUser.getAdminUserId());//
+            //Session设置过期的时间
+            session.setMaxInactiveInterval(60*60*2);
+            return "redirect:/admin/index";//重定向到首页卖弄
+        }else {
+            //Session中设置值
+            session.setAttribute("errorMsg","用户名和密码不正确");
+            return "admin/login"; //跳转到登录的页面
         }
 
+
     }
+
+
+
+
 
 
     //登录后的轮廓的接口的
