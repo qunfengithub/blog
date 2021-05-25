@@ -12,6 +12,7 @@
     <sql id="Base_Column_List">
     category_id, category_name, category_icon, category_rank, is_deleted, create_time
   </sql>
+     <!--查询分页的数据 返回结果集-->
     <select id="findCategoryList" parameterType="Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

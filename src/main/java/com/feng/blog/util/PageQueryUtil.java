@@ -12,6 +12,7 @@ import java.util.Map;
  * @link http://13blog.site
  */
 public class PageQueryUtil extends LinkedHashMap<String, Object> {
+
     //当前页码
     private int page;
     //每页条数

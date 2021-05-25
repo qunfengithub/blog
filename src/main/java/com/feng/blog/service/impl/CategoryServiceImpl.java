@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     //获取到博客的页数
     @Override
     public PageResult getBlogCategoryPage(PageQueryUtil pageUtil) {
-        //
+        //查询到
         List<BlogCategory> categoryList = blogCategoryMapper.findCategoryList(pageUtil);
         int total = blogCategoryMapper.getTotalCategories(pageUtil);
         PageResult pageResult = new PageResult(categoryList, total, pageUtil.getLimit(), pageUtil.getPage());
@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
             //插入一个实体类的  blog
             return blogCategoryMapper.insertSelective(blogCategory) >0 ;
         }
-
+        //返回的名称已经重复
         return false;
     }
 
@@ -67,11 +67,12 @@ public class CategoryServiceImpl implements CategoryService {
         BlogCategory blogCategory = blogCategoryMapper.selectByPrimaryKey(categoryId);
         //判断非空
         if (blogCategory !=null){
-
+            //是空的情况下 把 分类的写入里面
+            //把 博客的分类写入到分类中
             blogCategory.setCategoryName(categoryName);
             blogCategory.setCategoryIcon(categoryIcon);
 
-            //修改实体类
+            //  博客的分类的名称的修改  修改实体类
          blogMapper.updateBlogCategorys(categoryName,blogCategory.getCategoryId(),new Integer[]{categoryId});
          return blogCategoryMapper.updateByPrimaryKeySelective(blogCategory)>0;
         }

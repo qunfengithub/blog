@@ -22,15 +22,19 @@ public class AdminLoginInterceptor  implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        //获取程序输入url 的路径
         String uri = request.getServletPath();
 
         //开始的时 admin /后面的路径 要拦截 防止 出现的直接进入后面的路径的情况
         if (uri.startsWith("/admin") && null ==request.getSession().getAttribute("loginUser")){
 
-            //在Session 中 设置 错误的，可以重新登录的
+            //在Session 中 设置 错误的信息 ，可以重新登录的
             request.getSession().setAttribute("errorMag","请登录");
+            
             //响应到重定向的 登录的页面去
             response.sendRedirect(request.getContextPath()+"/admin/login");
+
+            //返回错误
             return false;
 
         }else{

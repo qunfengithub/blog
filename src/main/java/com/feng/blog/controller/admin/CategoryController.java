@@ -43,6 +43,7 @@ public class CategoryController {
         if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
             return ResultGenerator.genFailResult("参数异常！");
         }
+        //有一个分页的工具类
         PageQueryUtil pageUtil = new PageQueryUtil(params);
         return ResultGenerator.genSuccessResult(categoryService.getBlogCategoryPage(pageUtil));
     }
@@ -52,27 +53,23 @@ public class CategoryController {
      * 分类添加  添加分类的接口
      *
      */
-    @RequestMapping(value = "/categories/save",method = RequestMethod.GET)
+    @RequestMapping(value = "/categories/save" ,method = RequestMethod.POST)
     @ResponseBody
-    public Result save(@RequestParam("categoryName") String categoryName,
+    public Result save(@RequestParam("categoryName") String categroyName,
                        @RequestParam("categoryIcon") String categoryIcon){
-
-        //先判断分类名称和分类图标是否为空
-        if(StringUtils.isEmpty(categoryName)){
-            return ResultGenerator.genFailResult("请输入分类名称！");
+        if (StringUtils.isEmpty(categroyName)){
+            return ResultGenerator.genFailResult("分类名称不能为空");
         }
 
         if (StringUtils.isEmpty(categoryIcon)){
-            return ResultGenerator.genFailResult("请选择分类图标");
+            return ResultGenerator.genFailResult("分类图标不能为空");
         }
 
-        //添加分类去保存
-        if (categoryService.saveCategory(categoryName,categoryIcon)){
-            return ResultGenerator.genSuccessResult();//返回成功的结果
-        }else{
+        if (categoryService.saveCategory(categroyName,categoryIcon)){
+            return ResultGenerator.genSuccessResult("保存成功");
+        }else {
             return ResultGenerator.genFailResult("分类名称重复");
         }
-
     }
 
     /**
